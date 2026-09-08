@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4efe6" />
+  <title>יזמות לילדים</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #f4efe6;
+      --ink: #2a241c;
+      --muted: #6f655a;
+      --line: #e4d9c8;
+      --card: #fffdf8;
+      --accent: #c45c26;
+      --accent-ink: #fff8f3;
+      --ok: #3f6b4e;
+      --shadow: 0 10px 30px rgba(60, 40, 20, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: Heebo, Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100dvh;
+    }
+    .wrap {
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 20px 18px 36px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+    h1 { font-size: 22px; margin: 0; font-weight: 700; }
+    .quiet { color: var(--muted); font-size: 14px; margin: 0; }
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin: 16px 0 18px;
+    }
+    .day {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      font-family: inherit;
+      color: var(--muted);
+    }
+    .day span {
+      display: grid;
+      place-items: center;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .day.on span { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .day.done span { background: #e7f0e8; color: var(--ok); border-color: #cfe0d2; }
+    .day:disabled { opacity: 0.45; }
+    .screen {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 20px 18px 18px;
+      box-shadow: var(--shadow);
+    }
+    h2 { margin: 0 0 6px; font-size: 26px; line-height: 1.2; }
+    .lead { margin: 0 0 16px; color: var(--muted); font-size: 16px; line-height: 1.45; }
+    label { display: block; font-size: 14px; font-weight: 500; margin: 12px 0 6px; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 14px;
+      font: inherit;
+      font-size: 17px;
+      color: var(--ink);
+    }
+    textarea { min-height: 84px; resize: vertical; }
+    .cards { display: grid; gap: 10px; }
+    .pick {
+      text-align: right;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px 14px;
+      font: inherit;
+      color: var(--ink);
+    }
+    .pick.on { border-color: var(--ink); background: #fbf6ee; }
+    .pick b { display: block; font-size: 17px; }
+    .pick small { display: block; color: var(--muted); margin-top: 2px; }
+    .list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+    .list li, .check {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 16px;
+    }
+    .note {
+      background: #fbf6ee;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      line-height: 1.45;
+      margin: 12px 0;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .actions { display: flex; gap: 8px; margin-top: 16px; }
+    button.btn {
+      flex: 1;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 12px;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); }
+    .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); flex: 0.6; }
+    .btn:disabled { opacity: 0.4; }
+    .sum { display: grid; gap: 8px; margin-top: 8px; }
+    .sum div {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 16px;
+    }
+    .roles { display: grid; gap: 8px; margin: 10px 0 4px; }
+    .roles div {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .reset {
+      display: block;
+      margin: 18px auto 0;
+      background: none;
+      border: 0;
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>יזמות לילדים</h1>
+      <p class="quiet" id="who"></p>
+    </header>
+    <div class="days" id="days"></div>
+    <main class="screen" id="app"></main>
+    <button class="reset" id="reset" type="button">להתחיל שבוע מחדש</button>
+  </div>
+  <script>
+    const KEY = "yazamut-yeladim-v1";
+    const IDEAS = {
+      lemonade: {
+        title: "לימונדה ליד הבית",
+        hint: "כוס אחת, 5 שקלים",
+        price: 5,
+        locked: true,
+        list: [
+          "8 לימונים",
+          "250 גרם סוכר, או שקית קטנה",
+          "20 כוסות חד-פעמיות",
+          "שקית קרח אחת",
+          "קנקן מהבית",
+          "קרטון וטוש לשלט"
+        ],
+        note: "50 שקל תקציב זרע. 20 שקל לא מכסים לימונים וכוסות. המים מהברז. הדוכן רק כשאת בבית, למשפחה או שכן מוכר."
+      },
+      bracelets: {
+        title: "צמידים",
+        hint: "חרוז וחוט, מחיר אחד",
+        price: 10,
+        list: ["חוט אלסטי", "שקית חרוזים", "סוגרים או קשר", "שקית קטנה לאריזה"],
+        note: "קניות עד 50 שקל. מוכרים רק למשפחה או שכן מוכר."
+      },
+      cards: {
+        title: "ברכות כתובות",
+        hint: "פתק אחד, מחיר אחד",
+        price: 10,
+        list: ["בריסטול או דפים עבים", "טושים", "מעטפות", "מדבקות אם נשאר כסף"],
+        note: "קניות עד 50 שקל. בלי תמונות של הבנות על הברכה."
+      },
+      help: {
+        title: "עוזרות בבית",
+        hint: "עזרה אחת, מחיר אחד",
+        price: 10,
+        list: ["אין קניות", "רשימת 3 עזרות שהן יכולות לעשות לבד", "שעון או טיימר מהטלפון"],
+        note: "בלי לקנות כלום. העזרה רק בבית, ואמא בבית."
+      }
+    };
+
+    const start = () => ({
+      step: 0,
+      evelyn: "אוולין",
+      emilia: "אמיליה",
+      seed: 50,
+      idea: "",
+      price: 5,
+      buyer: "family",
+      buyerName: "",
+      momHome: false,
+      bought: [],
+      made: [false, false],
+      sold: 0,
+      spent: 0,
+      spend: 0,
+      save: 0,
+      share: 0,
+      doneThrough: 0
+    });
+
+    let state = load();
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (!raw) return start();
+        return { ...start(), ...JSON.parse(raw) };
+      } catch (e) {
+        return start();
+      }
+    }
+    function save() {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+    function idea() { return IDEAS[state.idea]; }
+    function moneyIn() { return Number(state.sold || 0) * Number(state.price || 0); }
+    function left() { return Number(state.seed || 0) - Number(state.spent || 0) + moneyIn(); }
+
+    function renderDays() {
+      const labels = ["1", "2", "3", "4", "5", "6", "7"];
+      document.getElementById("days").innerHTML = labels.map((n, i) => {
+        const day = i + 1;
+        const on = state.step === day;
+        const done = state.doneThrough >= day;
+        const can = day <= state.doneThrough + 1 && state.step !== 0;
+        return `<button class="day ${on ? "on" : ""} ${done ? "done" : ""}" type="button" data-day="${day}" ${can ? "" : "disabled"}><span>${n}</span></button>`;
+      }).join("");
+      document.querySelectorAll(".day").forEach((btn) => {
+        btn.onclick = () => {
+          const day = Number(btn.dataset.day);
+          if (day <= state.doneThrough + 1 && state.step !== 0) {
+            state.step = day;
+            save();
+            draw();
+          }
+        };
+      });
+    }
+
+    function draw() {
+      document.getElementById("who").textContent = state.step === 0 ? "" : `${state.evelyn} ו${state.emilia}`;
+      renderDays();
+      const app = document.getElementById("app");
+      const screens = [screenStart, screenDay1, screenDay2, screenDay3, screenDay45, screenDay45, screenDay6, screenDay7, screenDone];
+      const fn = state.step >= 8 ? screenDone : screens[state.step];
+      app.innerHTML = fn();
+      bind();
+    }
+
+    function screenStart() {
+      return `
+        <h2>שבוע אחד. עשר דקות ביום.</h2>
+        <p class="lead">אמא מחזיקה את הכסף. האתר רק זוכר.</p>
+        <label>שם של אוולין</label>
+        <input id="evelyn" value="${esc(state.evelyn)}" />
+        <label>שם של אמיליה</label>
+        <input id="emilia" value="${esc(state.emilia)}" />
+        <label>תקציב זרע, אצלך</label>
+        <input id="seed" inputmode="numeric" value="${state.seed}" />
+        <p class="note">ללימונדה צריך 50 שקל. 20 שקל לא מספיקים ללימונים וכוסות.</p>
+        <div class="actions"><button class="btn primary" id="next" type="button">מתחילות</button></div>
+      `;
+    }
+
+    function screenDay1() {
+      const cards = Object.entries(IDEAS).map(([id, item]) => `
+        <button class="pick ${state.idea === id ? "on" : ""}" type="button" data-idea="${id}">
+          <b>${item.title}</b>
+          <small>${item.hint}</small>
+        </button>
+      `).join("");
+      return `
+        <h2>יום 1. מה מוכרות?</h2>
+        <p class="lead">כרטיס אחד. לא ארבעה.</p>
+        <div class="cards">${cards}</div>
+        <div class="actions">
+          <button class="btn ghost" id="back" type="button">חזרה</button>
+          <button class="btn primary" id="next" type="button" ${state.idea ? "" : "disabled"}>ממשיכות</button>
+        </div>
+      `;
+    }
+
+    function screenDay2() {
+      const item = idea();
+      const priceField = item.locked
+        ? `<p class="note">מחיר אחד: 5 שקלים לכוס. לא משתנה.</p>`
+        : `<label>מחיר אחד</label><input id="price" inputmode="numeric" value="${state.price}" />`;
+      const mom = state.idea === "lemonade" || state.idea === "help"
+        ? `<label class="check"><input type="checkbox" id="momHome" ${state.momHome ? "checked" : ""} /> אמא בבית. בלי זה אין דוכן.</label>`
+        : "";
+      return `
+        <h2>יום 2. מחיר, ולמי.</h2>
+        <p class="lead">${item.title}</p>
+        <label>מה זה, במשפט</label>
+        <textarea id="desc" placeholder="למשל: לימונדה קרה בכוס">${esc(state.desc || "")}</textarea>
+        ${priceField}
+        <label>למי מוכרות</label>
+        <select id="buyer">
+          <option value="family" ${state.buyer === "family" ? "selected" : ""}>משפחה</option>
+          <option value="neighbor" ${state.buyer === "neighbor" ? "selected" : ""}>שכן מוכר</option>
+        </select>
+        <label>שם, אם יש</label>
+        <input id="buyerName" value="${esc(state.buyerName)}" placeholder="לא חובה" />
+        ${mom}
+        <div class="actions">
+          <button class="btn ghost" id="back" type="button">חזרה</button>
+          <button class="btn primary" id="next" type="button">ממשיכות</button>
+        </div>
+      `;
+    }
+
+    function screenDay3() {
+      const item = idea();
+      const boxes = item.list.map((line, i) => `
+        <label class="check"><input type="checkbox" data-buy="${i}" ${state.bought.includes(i) ? "checked" : ""} /> ${line}</label>
+      `).join("");
+      return `
+        <h2>יום 3. קניות.</h2>
+        <p class="lead">תקציב ${state.seed} שקל, אצל אמא.</p>
+        <p class="note">${item.note}</p>
+        <div class="list">${boxes}</div>
+        <div class="actions">
+          <button class="btn ghost" id="back" type="button">חזרה</button>
+          <button class="btn primary" id="next" type="button">קנינו</button>
+        </div>
+      `;
+    }
+
+    function screenDay45() {
+      const day = state.step;
+      const title = day === 4 ? "יום 4. מכינות." : "יום 5. עוד קצת.";
+      const idx = day === 4 ? 0 : 1;
+      return `
+        <h2>${title}</h2>
+        <p class="lead">${idea().title}. כמה יחידות, לא הרצאה.</p>
+        <label class="check"><input type="checkbox" id="made" ${state.made[idx] ? "checked" : ""} /> הכנו יחידות היום</label>
+        <div class="actions">
+          <button class="btn ghost" id="back" type="button">חזרה</button>
+          <button class="btn primary" id="next" type="button">סיימנו להיום</button>
+        </div>
+      `;
+    }
+
+    function screenDay6() {
+      const item = idea();
+      const roles = state.idea === "lemonade"
+        ? `<div class="roles">
+            <div><b>${esc(state.evelyn)}</b><br />סוחטת ומוזגת</div>
+            <div><b>${esc(state.emilia)}</b><br />מוכרת וסופרת</div>
+          </div>`
+        : `<p class="note">${esc(state.emilia)} סופרת. ${esc(state.evelyn)} מוסרת.</p>`;
+      return `
+        <h2>יום 6. יום מכירה.</h2>
+        <p class="lead">פעם אחת. מחיר ${state.price} שקלים.</p>
+        ${roles}
+        <p class="note">רק משפחה או שכן מוכר. ${state.momHome || state.idea === "bracelets" || state.idea === "cards" ? "אמא בבית." : "אם אמא לא בבית, אין מכירה היום."}</p>
+        <label>כמה נמכר</label>
+        <input id="sold" inputmode="numeric" value="${state.sold}" />
+        <label>כמה שקלים יצאו על הקניות</label>
+        <input id="spent" inputmode="numeric" value="${state.spent}" />
+        <p class="quiet">נכנס: ${moneyIn()} שקלים</p>
+        <div class="actions">
+          <button class="btn ghost" id="back" type="button">חזרה</button>
+          <button class="btn primary" id="next" type="button">נסגר היום</button>
+        </div>
+      `;
+    }
+
+    function screenDay7() {
+      const remain = left();
+      return `
+        <h2>יום 7. סופרות.</h2>
+        <p class="lead">גם אם נמכר אפס, היום נסגר.</p>
+        <div class="sum">
+          <div><span>תקציב זרע</span><b>${state.seed}</b></div>
+          <div><span>יצא על קניות</span><b>${state.spent}</b></div>
+          <div><span>נכנס מהמכירה</span><b>${moneyIn()}</b></div>
+          <div><span>נשאר</span><b>${remain}</b></div>
+        </div>
+        <label>לבזבז</label>
+        <input id="spend" inputmode="numeric" value="${state.spend}" />
+        <div class="row">
+          <div>
+            <label>לחסוך</label>
+            <input id="save" inputmode="numeric" value="${state.save}" />
+          </div>
+          <div>
+            <label>לתת</label>
+            <input id="share" inputmode="numeric" value="${state.share}" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn ghost" id="back" type="button">חזרה</button>
+          <button class="btn primary" id="next" type="button">סוגרות את השבוע</button>
+        </div>
+      `;
+    }
+
+    function screenDone() {
+      return `
+        <h2>השבוע נסגר.</h2>
+        <p class="lead">${esc(state.evelyn)} ו${esc(state.emilia)} עשו מכירה אחת.</p>
+        <div class="sum">
+          <div><span>נמכר</span><b>${state.sold}</b></div>
+          <div><span>נכנס</span><b>${moneyIn()} שקלים</b></div>
+          <div><span>לבזבז</span><b>${state.spend}</b></div>
+          <div><span>לחסוך</span><b>${state.save}</b></div>
+          <div><span>לתת</span><b>${state.share}</b></div>
+        </div>
+        <p class="note">זה רק לבנות. הורים אחרים מחכים עד שהשבוע הזה ייגמר אצלכן.</p>
+      `;
+    }
+
+    function bind() {
+      const next = document.getElementById("next");
+      const back = document.getElementById("back");
+      if (back) back.onclick = () => { state.step = Math.max(0, state.step - 1); save(); draw(); };
+      if (next) next.onclick = goNext;
+      document.querySelectorAll("[data-idea]").forEach((btn) => {
+        btn.onclick = () => {
+          state.idea = btn.dataset.idea;
+          const item = idea();
+          state.price = item.price;
+          if (item.locked) state.seed = Math.max(Number(state.seed) || 0, 50);
+          save();
+          draw();
+        };
+      });
+      document.querySelectorAll("[data-buy]").forEach((box) => {
+        box.onchange = () => {
+          const i = Number(box.dataset.buy);
+          const set = new Set(state.bought);
+          if (box.checked) set.add(i); else set.delete(i);
+          state.bought = [...set];
+          save();
+        };
+      });
+    }
+
+    function readFields() {
+      const take = (id) => document.getElementById(id);
+      if (take("evelyn")) state.evelyn = take("evelyn").value.trim() || "אוולין";
+      if (take("emilia")) state.emilia = take("emilia").value.trim() || "אמיליה";
+      if (take("seed")) state.seed = Number(take("seed").value) || 0;
+      if (take("desc")) state.desc = take("desc").value.trim();
+      if (take("price")) state.price = Number(take("price").value) || 0;
+      if (take("buyer")) state.buyer = take("buyer").value;
+      if (take("buyerName")) state.buyerName = take("buyerName").value.trim();
+      if (take("momHome")) state.momHome = take("momHome").checked;
+      if (take("made")) {
+        const idx = state.step === 4 ? 0 : 1;
+        state.made[idx] = take("made").checked;
+      }
+      if (take("sold")) state.sold = Number(take("sold").value) || 0;
+      if (take("spent")) state.spent = Number(take("spent").value) || 0;
+      if (take("spend")) state.spend = Number(take("spend").value) || 0;
+      if (take("save")) state.save = Number(take("save").value) || 0;
+      if (take("share")) state.share = Number(take("share").value) || 0;
+    }
+
+    function goNext() {
+      readFields();
+      if (state.step === 2) {
+        const item = idea();
+        if (item && item.locked && !state.momHome) {
+          alert("הדוכן רק כשאת בבית.");
+          return;
+        }
+        if (state.idea === "lemonade") state.price = 5;
+      }
+      if (state.step === 1 && !state.idea) return;
+      if (state.step < 7) {
+        state.doneThrough = Math.max(state.doneThrough, state.step);
+        state.step += 1;
+      } else if (state.step === 7) {
+        state.doneThrough = 7;
+        state.step = 8;
+      }
+      save();
+      draw();
+    }
+
+    function esc(s) {
+      return String(s || "").replace(/[&<>"']/g, (c) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[c]));
+    }
+
+    document.getElementById("reset").onclick = () => {
+      if (!confirm("למחוק את השבוע ולהתחיל מחדש?")) return;
+      state = start();
+      save();
+      draw();
+    };
+
+    draw();
+  </script>
+</body>
+</html>
